@@ -166,7 +166,7 @@ body {
 .cal-day.has-log::after {
   content: '';
   position: absolute;
-  bottom: 5px;
+  top: 5px;
   right: 5px;
   width: 6px;
   height: 6px;
@@ -961,7 +961,8 @@ function renderCalendar() {
     html += `<span class="date-num">${d}</span>`;
     if (plan) {
       html += `<span class="workout-tag ${tagClass(plan.type)}">${plan.type === 'Cross-train' ? 'Cross' : plan.type === 'RACE DAY' ? 'Race' : plan.type}</span>`;
-      if (plan.dist) html += `<span class="workout-dist">${plan.dist}</span>`;
+      const displayDist = (log && log.distance) ? log.distance : plan.dist;
+      if (displayDist) html += `<span class="workout-dist">${displayDist}</span>`;
     }
     html += '</div>';
   }
