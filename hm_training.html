@@ -1065,18 +1065,16 @@ function openDay(key) {
 
   html += `<div class="log-section"><h4>Your Log</h4>`;
 
-  if (!isRest) {
-    html += `
-      <div class="log-field">
-        <label>Actual distance</label>
-        <input type="text" id="logDist" inputmode="decimal" placeholder="e.g. 4.2 mi" value="${log.distance || ''}">
-      </div>
-      <div class="log-field">
-        <label>Time</label>
-        <input type="text" id="logTime" placeholder="e.g. 42:30" value="${log.time || ''}">
-      </div>
-    `;
-  }
+  html += `
+    <div class="log-field">
+      <label>Actual distance</label>
+      <input type="text" id="logDist" inputmode="decimal" placeholder="e.g. 4.2 mi" value="${log.distance || ''}">
+    </div>
+    <div class="log-field">
+      <label>Time</label>
+      <input type="text" id="logTime" placeholder="e.g. 42:30" value="${log.time || ''}">
+    </div>
+  `;
 
   html += `
     <div class="log-field">
@@ -1124,14 +1122,10 @@ function closeModal() {
 }
 
 function saveLog(key) {
-  const plan = PLAN[key];
-  const isRest = plan && plan.type === 'Rest';
   const data = {};
 
-  if (!isRest) {
-    data.distance = document.getElementById("logDist").value.trim();
-    data.time = document.getElementById("logTime").value.trim();
-  }
+  data.distance = document.getElementById("logDist").value.trim();
+  data.time = document.getElementById("logTime").value.trim();
   data.feel = document.getElementById("logFeel").value;
   data.notes = document.getElementById("logNotes").value.trim();
 
