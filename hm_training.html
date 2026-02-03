@@ -514,12 +514,29 @@ body {
   transform: translateY(0);
 }
 
-.modal-handle {
-  width: 36px;
-  height: 4px;
-  background: var(--text-muted);
-  border-radius: 2px;
-  margin: 12px auto 20px;
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-dim);
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.modal-close:active {
+  transform: scale(0.9);
+}
+
+.modal-sheet {
+  position: relative;
+  padding-top: 20px;
 }
 
 .modal-date {
@@ -799,7 +816,7 @@ body {
 
 <div class="modal-overlay" id="modal">
   <div class="modal-sheet" id="modalSheet">
-    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
     <div id="modalContent"></div>
   </div>
 </div>
