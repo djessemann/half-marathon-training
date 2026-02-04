@@ -1045,16 +1045,50 @@ function renderWeekSummary() {
 }
 
 // ─── PLAN SUMMARY ───
+function calcWeeklyMiles() {
+  return weeks.map(([, workouts]) => {
+    let total = 0;
+    for (const [, [type, dist]] of Object.entries(workouts)) {
+      if (dist && type !== "RACE DAY") {
+        total += parseFloat(dist) || 0;
+      }
+    }
+    return total;
+  });
+}
+
+function formatMilesRange(miles) {
+  const min = Math.min(...miles);
+  const max = Math.max(...miles);
+  if (min === max) return `~${min} mi/wk`;
+  return `${min}-${max} mi/wk`;
+}
+
 function renderPlanSummary() {
+  const weeklyMiles = calcWeeklyMiles();
+
+  // Base building: weeks 1-3
+  const baseMiles = formatMilesRange(weeklyMiles.slice(0, 3));
+  // Cutback 1: week 4
+  const cutback1Miles = `~${weeklyMiles[3]} mi/wk`;
+  // Build: weeks 5-7
+  const buildMiles = formatMilesRange(weeklyMiles.slice(4, 7));
+  // Cutback 2: week 8
+  const cutback2Miles = `~${weeklyMiles[7]} mi/wk`;
+  // Peak: weeks 9-10
+  const peakMiles = formatMilesRange(weeklyMiles.slice(8, 10));
+  // Taper: weeks 11-12
+  const taperMiles = `${weeklyMiles[10]} → ${weeklyMiles[11]} mi/wk`;
+
   document.getElementById("planSummary").innerHTML = `
     <div class="plan-summary">
       <h3>Plan Overview</h3>
-      <div class="phase"><span class="desc">Base building</span><span class="weeks">Wk 1-3</span><span class="miles">15-18 mi/wk</span></div>
-      <div class="phase"><span class="desc">Cutback</span><span class="weeks">Wk 4</span><span class="miles">~15 mi/wk</span></div>
-      <div class="phase"><span class="desc">Build</span><span class="weeks">Wk 5-7</span><span class="miles">20-23 mi/wk</span></div>
-      <div class="phase"><span class="desc">Cutback</span><span class="weeks">Wk 8</span><span class="miles">~17.5 mi/wk</span></div>
-      <div class="phase"><span class="desc">Peak</span><span class="weeks">Wk 9-10</span><span class="miles">24.5-25.5 mi/wk</span></div>
-      <div class="phase"><span class="desc">Taper</span><span class="weeks">Wk 11-12</span><span class="miles">19 → 7 mi/wk</span></div>
+      <div class="phase"><span class="desc">Base building</span><span class="weeks">Wk 1-3</span><span class="miles">${baseMiles}</span></div>
+      <div class="phase"><span class="desc">Cutback</span><span class="weeks">Wk 4</span><span class="miles">${cutback1Miles}</span></div>
+      <div class="phase"><span class="desc">Build</span><span class="weeks">Wk 5-7</span><span class="miles">${buildMiles}</span></div>
+      <div class="phase"><span class="desc">Cutback</span><span class="weeks">Wk 8</span><span class="miles">${cutback2Miles}</span></div>
+      <div class="phase"><span class="desc">Peak</span><span class="weeks">Wk 9-10</span><span class="miles">${peakMiles}</span></div>
+      <div class="phase"><span class="desc">Taper</span><span class="weeks">Wk 11-12</span><span class="miles">${taperMiles}</span></div>
     </div>
   `;
 }
